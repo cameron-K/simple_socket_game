@@ -1,18 +1,22 @@
-*{
+		*{
 			margin:0;
 			padding:0;
 		}
-		html{
+
+		#super_container{
+			width:100vw;
+			height:100vh;
 			background-color: #efbf5f;
 			box-shadow: inset 0px 0px 30px 10px;
 		}
 		#sign_in,#loading{
 			width: 30%;
-			margin:70px auto;
+			margin:0px auto;
+			padding-top: 70px;
+			text-align: center;
 		}
 		#loading img{
-			width:35px;
-			height:35px;
+			width:75px;
 		}
 		#game{
 			height:480px;
@@ -26,7 +30,8 @@
 		}
 		#container{
 			width: 1000px;
-			margin:20px auto;
+			margin:0px auto;
+			padding-top: 20px;
 		}
 		.cell{
 			border: 1px solid #ddd;
@@ -50,6 +55,12 @@
 			margin:15px 30px;
 			width: 100px;
 			text-align: center;
+		}
+		#player1{
+			color:black;
+		}
+		#player2{
+			color:blue;
 		}
 		#game_over{
 			font-size: 20px;
