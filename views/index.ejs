@@ -1,0 +1,170 @@
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src='js/main.js'></script>
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#container').css('display','none');
+			$('#loading').css('display','none');
+			var socket = io.connect();
+			signIn();
+			
+   			socket.on('game_over',function(cells,player1,player2,winner){
+   				for(i=0;i<cells.length;i++){
+					if(cells[i].active){
+						cells[i].active=false;
+						$('#'+i).toggleClass('active');
+						// if(cells[i].player.name==player1.name){
+
+						// }
+
+					}
+				}
+				$('#'+player1.name+'_score').html(player1.score);
+				$('#'+player2.name+'_score').html(player2.score);
+				console.log(player1);
+				console.log(player2);
+
+				$('#game').html("<div id='game_over'><h3>GAME OVER<br>"+winner+" wins!<h3></div>");
+				// $('#game_over').append("<button>PLAY AGAIN</button>").click(function(){
+				// 	initialize(['tim','kelly'],32);
+				// });
+
+				
+   			})
+			function end(cells,winner,loser){
+				console.log('game ended');
+				for(i=0;i<cells.length;i++){
+					if(cells[i].active){
+						cells[i].active=false;
+						$('#'+i).toggleClass('active');
+						cells[i].deactivation_time=new Date().getTime();
+						cells[i].player.updateScore(Math.floor((cells[i].deactivation_time-cells[i].activation_time)/100));
+						$('#'+cells[i].player.name+'_score').html(cells[i].player.score);
+
+					}
+
+					$('#game').html("<div id='game_over'><h3>GAME OVER<br>"+winner+" wins!<h3></div>");
+					$('#game_over').append("<button>PLAY AGAIN</button>").click(function(){
+						initialize(['tim','kelly'],32);
+					});
+
+				}
+			}
+
+
+			function signIn(){
+				$('#sign_in > input').focus();
+				$('#sign_in > button').click(function(){
+					var name=$('#sign_in > input').val();
+					socket.emit('new_user',name);
+					$('#sign_in').css('display','none');
+					$('#loading').css('display','block');
+				});
+			}
+
+
+			socket.on('start',function(players,game_id){
+				var player1=players[0]
+				var player2=players[1];
+				var no_of_cells=32;
+				var score_limit=100;
+
+
+				socket.emit('players_ready',players,game_id);
+				$('#loading').css('display','none');
+				$('#container').css('display','block');
+				
+
+				$('#player1_name').html(player1.name)
+				$('#player2_name').html(player2.name)
+				
+				$('#player1_score').attr('id',player1.name+'_score');
+				$('#player2_score').attr('id',player2.name+'_score');
+				$('#'+player1.name+'_score').html(0);
+				$('#'+player2.name+'_score').html(0);
+
+				$('#player1_score_update').attr('id',player1.name+'_score_update');
+				$('#player2_score_update').attr('id',player2.name+'_score_update');
+
+
+				$('#game').html("");
+
+				for(i=0;i<no_of_cells/2;i++){
+					$('#game').append("<div id="+i+" class='cell player1'></div>");
+				}
+				for(i=no_of_cells/2;i<no_of_cells;i++){
+					$('#game').append("<div id="+i+" class='cell player2'></div>");
+				}
+
+				$('.cell').click(function(){
+
+					var id=$(this).attr('id');
+
+					socket.emit('cell_clicked',id,game_id);
+					
+				});
+			});
+
+			socket.on('cell_activated',function(id){
+				$('#'+id).toggleClass('active');
+			});
+
+			socket.on('cell_deactivated',function(id,player,new_points){
+				$('#'+id).toggleClass('active');
+				$('#'+player.name+'_score').html(player.score);
+				$('#'+player.name+'_score_update').html("<span id='anim' class='enable'>+ "+new_points+"</span>");
+			});
+
+		});
+
+		
+
+	</script>
+</head>
+<body>
+
+	<div id="sign_in">
+		<p>Activate opposing cells to gain points over time. Deactivate active cells to stop opponents from scoring.</p>
+		Name: <input type='text'>
+		<button>Start</button>
+	</div>
+
+	<div id="loading">
+		<h3>Finding another player...</h3>
+		<img src="images/loader.gif">
+	</div>
+
+	<div id="container">
+		<div id='player1'>
+			<h3 id='player1_name'></h3>
+			Score:<span id='player1_score'></span>
+			<div class='update'>
+				<span id='player1_score_update'></span>
+			</div>
+		</div>
+
+		<div id="game"></div>
+
+		<div id='player2'>
+			<h3 id='player2_name'></h3>
+			Score:<span id='player2_score'></span>
+			<div class='update'>
+				<span id='player2_score_update'></span>
+			</div>
+		</div>
+	</div>
+
+	
+
+	
+
+
+
+
+</body>
+</html>

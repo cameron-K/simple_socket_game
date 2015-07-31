@@ -1,0 +1,105 @@
+*{
+			margin:0;
+			padding:0;
+		}
+		html{
+			background-color: #efbf5f;
+			box-shadow: inset 0px 0px 30px 10px;
+		}
+		#sign_in,#loading{
+			width: 30%;
+			margin:70px auto;
+		}
+		#loading img{
+			width:35px;
+			height:35px;
+		}
+		#game{
+			height:480px;
+			width: 600px;
+			margin:70px auto;
+			background-color: #ddd;
+			display: inline-block;
+			border-radius: 10px;
+			overflow: hidden;
+			border:3px solid #ddd;
+		}
+		#container{
+			width: 1000px;
+			margin:20px auto;
+		}
+		.cell{
+			border: 1px solid #ddd;
+			height: 58px;
+			width: 147px;
+			display: inline-block;
+		}
+		.player1{
+			background-color: black;
+		}
+		.player2{
+			background-color: blue;
+		}
+		.active{
+			background-color: green;
+		}
+		#player1,#player2{
+			display: inline-block;
+			vertical-align: top;
+			padding:0px;
+			margin:15px 30px;
+			width: 100px;
+			text-align: center;
+		}
+		#game_over{
+			font-size: 20px;
+			/*position: absolute;*/
+			width: 100%;
+			height: 100%;
+			padding-top: 150px;
+			text-align: center;
+
+			/*right: 0px;*/
+			/*top:0px;*/
+		}
+
+		#anim.enable
+		{
+			-webkit-animation: flash 1s linear 1;
+			-moz-animation: flash 1s linear 1;
+			-ms-animation: flash 1s linear 1;
+			-o-animation: flash 1s linear 1;
+			animation: flash 1s linear 1;
+			position:relative;
+			visibility: hidden;
+			font-size: 23px;
+			/*color:;*/
+		}
+
+
+		/* animation */
+		@-webkit-keyframes flash {
+			0% {visibility: visible;
+				color:blue;}
+			10% { bottom: 4px;
+				right:1px;}
+			50% { opacity: 0.4;
+				 color:red;
+				 right:5px;}
+			100% { bottom: 60px;
+				right:2px;}
+			100% { opacity: 0;}
+			
+			
+		}
+
+		.cell.active{
+			animation:active 1s linear infinite;
+		}
+		@-webkit-keyframes active{
+			from {background-color: yellow;}
+			to {background-color: purple;}
+		}
+		.update{
+			margin-top: 200px;
+		}
