@@ -7,3 +7,5 @@ Game instructions:
 "Protect your cells. Your cells are the color of your name. 
 Activating opposing cells gains points over time. 
 Deactivate active cells to stop opponents from scoring." 
+
+https://boiling-stream-8261.herokuapp.com/
